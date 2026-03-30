@@ -13,8 +13,12 @@ __pycache__/
 .idea/
 .vscode/
 
-# Data files (optional if large)
-data/raw/
+# Data files
+data/
 
 # Secrets
 .env
+
+# Jupyter notebook checkpoints
+.ipynb_checkpoints/
+
