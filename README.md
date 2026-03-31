@@ -129,7 +129,24 @@ pip install -r requirements.txt
 - Logistic Regression will be retained as an interpretable baseline
 
 ### 2. Feature Engineering
-*(To be updated)*
+Two datasets were created to measure the impact of feature engineering through an ablation study:
+
+**Baseline dataset** (`data_baseline.csv`) — cleaned data with multicollinearity handled and log transform applied:
+- Dropped BILL_AMT2–6 (intercorrelation of 0.80–0.95 with BILL_AMT1)
+- Replaced LIMIT_BAL with LOG_LIMIT_BAL (log transform — right skewed, no zero/negative values)
+
+**Featured dataset** (`data_featured.csv`) — engineered features replacing raw columns:
+- `BILL_LIMIT_RATIO` = BILL_AMT1 / LIMIT_BAL — captures credit utilisation
+- `PAYMENT_RATIO` = PAY_AMT1 / BILL_AMT1 — captures proportion of bill paid (with careful edge case handling for zero/negative bills)
+- `TOTAL_PAID_6MONTHS` = sum(PAY_AMT1–6) — aggregates consistent payment behaviour signal across all 6 months
+- `LOG_LIMIT_BAL` = log(LIMIT_BAL) — log transform applied upfront (safe — no zero/negative values)
+- Dropped BILL_AMT1–6, PAY_AMT1–6 and LIMIT_BAL (replaced by engineered features)
+
+**Skew & outlier handling strategy:**
+- Upfront (feature engineering): log transform for LIMIT_BAL only
+- Inside pipeline (modeling): Yeo-Johnson transformation for all other numerical features
+- Capping: applied to PAYMENT_RATIO only where division by near-zero values produced mathematical artifacts
+- 
 
 ### 3. Models Trained
 *(To be updated)*
