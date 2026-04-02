@@ -4,13 +4,15 @@ import numpy as np
 import sys
 import os
 
-sys.path.append(os.path.join(os.path.dirname(__file__), '../../src'))
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(os.path.join(ROOT_DIR, 'src'))
+
 from inference import load_model, engineer_features, predict
 
 st.set_page_config(page_title="Single Prediction", page_icon="🔍", layout="wide")
 
 # Load model
-model = load_model(os.path.join(os.path.dirname(__file__), '../../models/lgb_model.pkl'))
+model = load_model(os.path.join(ROOT_DIR, 'models/lgb_model.pkl'))
 
 st.title("🔍 Single Customer Prediction")
 st.markdown("Enter the customer's details below to get a default risk assessment.")

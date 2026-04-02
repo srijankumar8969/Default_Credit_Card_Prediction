@@ -5,7 +5,9 @@ import matplotlib.pyplot as plt
 import sys
 import os
 
-sys.path.append(os.path.join(os.path.dirname(__file__), '../../src'))
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(os.path.join(ROOT_DIR, 'src'))
+
 from inference import load_model, engineer_features, predict
 
 from sklearn.metrics import (confusion_matrix, ConfusionMatrixDisplay,
@@ -15,7 +17,7 @@ from sklearn.metrics import (confusion_matrix, ConfusionMatrixDisplay,
 
 st.set_page_config(page_title="Model Dashboard", page_icon="📊", layout="wide")
 
-model = load_model(os.path.join(os.path.dirname(__file__), '../../models/lgb_model.pkl'))
+model = load_model(os.path.join(ROOT_DIR, 'models/lgb_model.pkl'))
 
 st.title("📊 Model Dashboard")
 st.markdown("Model performance metrics, evaluation plots and feature importance for the final LightGBM model.")
@@ -24,7 +26,7 @@ st.divider()
 # Load test data and generate predictions
 @st.cache_data
 def load_test_data():
-    featured = pd.read_csv(os.path.join(os.path.dirname(__file__), '../../data/processed/data_featured.csv'))
+    featured = pd.read_csv(os.path.join(ROOT_DIR, 'data/processed/data_featured.csv'))
     from sklearn.model_selection import train_test_split
     X = featured.drop('default.payment.next.month', axis=1)
     y = featured['default.payment.next.month']
@@ -83,13 +85,13 @@ st.markdown("The SHAP summary plot shows which features have the most impact on 
 try:
     import shap
     @st.cache_data
-    def get_shap_values():
-        lgb_model = model.named_steps['model']
+    def get_shap_values(_model, _X_test):
+        lgb_model = _model.named_steps['model']
         explainer = shap.TreeExplainer(lgb_model)
-        shap_values = explainer.shap_values(X_test)
+        shap_values = explainer.shap_values(_X_test)
         return shap_values
 
-    shap_values = get_shap_values()
+    shap_values = get_shap_values(model, X_test)
     fig, ax = plt.subplots(figsize=(10, 8))
     shap.summary_plot(shap_values, X_test, show=False)
     plt.title('SHAP Summary Plot — LightGBM (Tuned)')

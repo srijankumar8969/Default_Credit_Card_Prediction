@@ -3,12 +3,14 @@ import pandas as pd
 import sys
 import os
 
-sys.path.append(os.path.join(os.path.dirname(__file__), '../../src'))
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(os.path.join(ROOT_DIR, 'src'))
+
 from inference import load_model, engineer_features, predict
 
 st.set_page_config(page_title="Batch Prediction", page_icon="📂", layout="wide")
 
-model = load_model(os.path.join(os.path.dirname(__file__), '../../models/lgb_model.pkl'))
+model = load_model(os.path.join(ROOT_DIR, 'models/lgb_model.pkl'))
 
 st.title("📂 Batch Prediction")
 st.markdown("Upload a CSV file containing multiple customers to get default risk predictions for all of them at once.")
@@ -18,7 +20,7 @@ st.divider()
 st.subheader("📥 Download Template")
 st.markdown("Not sure about the format? Download the sample CSV template below:")
 
-template_path = os.path.join(os.path.dirname(__file__), '../assets/sample_batch.csv')
+template_path = os.path.join(ROOT_DIR, 'app/assets/sample_batch.csv')
 with open(template_path, 'rb') as f:
     st.download_button(
         label="Download Sample CSV Template",
