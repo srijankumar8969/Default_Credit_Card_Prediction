@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import os
 
-# Baseline Dataset
+# Loading Dataset
 def load_data(filepath):
     df = pd.read_csv(filepath)
     return df
