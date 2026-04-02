@@ -15,9 +15,13 @@ Credit_Risk_Prediction/
 │
 ├── data/
 │   ├── raw/                        # Original dataset (UCI_Credit_Card.csv) — not committed
-│   └── processed/                  # Cleaned and featured datasets — not committed
+│   └── processed/                  # Cleaned and featured datasets — committed
+│       ├── data_preprocessed.csv
+│       ├── data_baseline.csv
+│       └── data_featured.csv
 │
-├── models/                         # Saved trained models — not committed
+├── models/
+│   └── lgb_model.pkl              # Trained LightGBM model — committed
 │
 ├── notebooks/
 │   ├── eda.ipynb                   # Exploratory Data Analysis
@@ -39,33 +43,8 @@ Credit_Risk_Prediction/
 
 ---
 
-## 📥 Data Setup
-The dataset is not included in this repository. Follow these steps to set it up:
-
-1. Download `UCI_Credit_Card.csv` from [Kaggle](https://www.kaggle.com/datasets/uciml/default-of-credit-card-clients-dataset)
-2. Create the following folder structure in the root of the project:
-```
-mkdir -p data/raw
-```
-3. Place `UCI_Credit_Card.csv` inside `data/raw/`
-4. Run the preprocessing script to generate the cleaned dataset:
-```
-cd src
-python data_preprocessing.py
-```
-This will automatically create `data/processed/` and save `data_preprocessed.csv` there.
-
----
-
-## 📊 Dataset
-**Source:** [UCI Machine Learning Repository — Default of Credit Card Clients](https://www.kaggle.com/datasets/uciml/default-of-credit-card-clients-dataset)
-
-- **Rows:** 30,000 (29,965 after removing duplicates)
-- **Features:** 24 (after dropping ID column)
-- **Target variable:** `default.payment.next.month` (1 = default, 0 = no default)
-- **Class imbalance:** ~78% non-default, ~22% default
-
-> **Note:** The original Kaggle data dictionary contains several inaccuracies. Corrections were sourced from a [Kaggle discussion](https://www.kaggle.com/datasets/uciml/default-of-credit-card-clients-dataset/discussion/34608) where the dataset creator confirmed the true variable definitions. These corrections informed several preprocessing decisions.
+## 🌐 Live Demo
+*(To be added after Streamlit deployment)*
 
 ---
 
@@ -88,6 +67,41 @@ source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 # Install dependencies
 pip install -r requirements.txt
 ```
+
+### Running the App
+Since the processed datasets and trained model are included in the repository, you can run the Streamlit app directly after installation:
+```bash
+streamlit run app/app.py
+```
+
+### Retraining from Scratch (Optional)
+If you want to retrain the model from scratch using fresh data:
+
+1. Download `UCI_Credit_Card.csv` from [Kaggle](https://www.kaggle.com/datasets/uciml/default-of-credit-card-clients-dataset)
+2. Create the raw data folder and place the dataset there:
+```bash
+mkdir -p data/raw
+# Place UCI_Credit_Card.csv inside data/raw/
+```
+3. Run the full pipeline:
+```bash
+cd src
+python data_preprocessing.py
+python feature_engineering.py
+python model_training.py
+```
+
+---
+
+## 📊 Dataset
+**Source:** [UCI Machine Learning Repository — Default of Credit Card Clients](https://www.kaggle.com/datasets/uciml/default-of-credit-card-clients-dataset)
+
+- **Rows:** 30,000 (29,965 after removing duplicates)
+- **Features:** 24 (after dropping ID column)
+- **Target variable:** `default.payment.next.month` (1 = default, 0 = no default)
+- **Class imbalance:** ~78% non-default, ~22% default
+
+> **Note:** The original Kaggle data dictionary contains several inaccuracies. Corrections were sourced from a [Kaggle discussion](https://www.kaggle.com/datasets/uciml/default-of-credit-card-clients-dataset/discussion/34608) where the dataset creator confirmed the true variable definitions. These corrections informed several preprocessing decisions.
 
 ---
 

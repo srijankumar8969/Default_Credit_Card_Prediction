@@ -14,13 +14,10 @@ __pycache__/
 .vscode/
 
 # Data files
-data/
+data/raw/
 
 # Secrets
 .env
 
 # Jupyter notebook checkpoints
 .ipynb_checkpoints/
-
-# Model files
-models/
