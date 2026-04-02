@@ -9,6 +9,27 @@ This project builds and compares multiple machine learning models to predict cre
 
 ---
 
+## ✨ Project Highlights
+
+- **Rigorous evaluation** — 12 models compared across a three-stage ablation study (baseline → feature engineering → hyperparameter tuning), isolating the contribution of each decision rather than just reporting a final number
+- **Justified feature engineering** — every engineered feature is motivated by EDA findings, with careful handling of edge cases (division by zero, negative bills, extreme outliers) documented throughout
+- **No data leakage** — strict train/test separation with all preprocessing, scaling and class imbalance handling inside sklearn pipelines fitted only on training folds
+- **Explainable predictions** — SHAP analysis validates EDA findings and provides feature-level explanations for individual predictions, exposed in the Streamlit app
+- **Adjustable risk threshold** — the Streamlit app exposes the decision threshold as an interactive slider, allowing loan officers to balance recall and precision based on their business context
+- **Production-ready structure** — modular `src/` pipeline scripts, end-to-end `main.py`, deployed Streamlit app with single prediction, batch prediction and model dashboard
+---
+
+
+## 🌐 Live Demo
+**[credit-card-default-prediction-vs.streamlit.app](https://credit-card-default-prediction-vs.streamlit.app)**
+
+The app includes three pages:
+- **Single Prediction** — enter a customer's details and get an instant default risk assessment with adjustable threshold
+- **Batch Prediction** — upload a CSV file to get predictions for multiple customers at once
+- **Model Dashboard** — explore model performance metrics, confusion matrix, ROC curve and SHAP feature importance
+
+---
+
 ## 📂 Project Structure
 ```
 Credit_Risk_Prediction/
@@ -34,31 +55,35 @@ Credit_Risk_Prediction/
 │   ├── model_training.py          # Model training pipeline
 │   └── inference.py               # Inference pipeline for Streamlit app
 │
-├── app/                           # Streamlit application (to be added)
+├── app/
+│   ├── app.py                     # Main Streamlit entry point
+│   ├── assets/
+│   │   └── sample_batch.csv       # Template CSV for batch predictions
+│   └── pages/
+│       ├── 1_Single_Prediction.py
+│       ├── 2_Batch_Prediction.py
+│       └── 3_Model_Dashboard.py
 │
 ├── main.py                        # End-to-end pipeline
-├── requirements.txt               # Dependencies (to be added)
+├── requirements.txt               # Python dependencies
+├── packages.txt                   # System dependencies for Streamlit Cloud
+├── runtime.txt                    # Python version for Streamlit Cloud
 └── README.md
 ```
-
----
-
-## 🌐 Live Demo
-*(To be added after Streamlit deployment)*
 
 ---
 
 ## ⚙️ Setup & Installation
 
 ### Prerequisites
-- Python 3.9+
+- Python 3.11+
 - Virtual environment (recommended)
 
 ### Installation
 ```bash
 # Clone the repository
-git clone <your-repo-url>
-cd Credit_Risk_Prediction
+git clone https://github.com/VishalSaravanan02/Default_Credit_Card_Prediction.git
+cd Default_Credit_Card_Prediction
 
 # Create and activate virtual environment
 python -m venv .venv
@@ -83,12 +108,9 @@ If you want to retrain the model from scratch using fresh data:
 mkdir -p data/raw
 # Place UCI_Credit_Card.csv inside data/raw/
 ```
-3. Run the full pipeline:
+3. Run the full pipeline with a single command:
 ```bash
-cd src
-python data_preprocessing.py
-python feature_engineering.py
-python model_training.py
+python main.py
 ```
 
 ---
@@ -228,11 +250,6 @@ The default decision threshold of 0.5 is used for the final model. The Streamlit
 - **Feature engineering improved model performance** — BILL_LIMIT_RATIO and TOTAL_PAID_6MONTHS rank 2nd and 3rd in SHAP importance
 - **Tree-based models significantly outperform Logistic Regression** — confirming non-linear relationships dominate this dataset
 - **Final model (LightGBM tuned) achieves AUC-ROC of 0.7734** on the held-out test set — consistent with published research on this dataset (typical range 0.75–0.82)
-
----
-
-## 🌐 Streamlit App
-*(To be updated after app development)*
 
 ---
 
